@@ -56,16 +56,33 @@ class TaskListController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, taskList $taskList)
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            $task=TaskList::findOrFail($id);
+            $task->name=$request->name ?? $task->name;
+            $task->priority=$request->priority ?? $task->priority;
+            $task->status=$request->status ?? $post->status;
+            $task->save();
+            return response()->json(["success"=>true,"message"=>"Task updated successfully!","result"=>$task],200);
+        } catch (\Throwable $th) {
+            return response()->json(['success'=>false,'message'=>'Internal Server Error!','error'=>$th->getMessage()],500);
+        }
+        
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(taskList $taskList)
+    public function destroy($id)
     {
-        //
+        try {
+            $task=TaskList::findOrFail($id);
+            return response()->json(["success"=>true,"message"=>"Task removed successfully!","result"=>$task->delete()],200);
+        } catch (\Throwable $th) {
+            return response()->json(['success'=>false,'message'=>'Internal Server Error!','error'=>$th->getMessage()],500);
+
+        }
     }
 }
