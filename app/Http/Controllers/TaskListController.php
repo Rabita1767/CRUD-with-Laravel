@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TaskList;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTaskListRequest;
+use App\Http\Requests\UpdateTaskListRequest;
 
 class TaskListController extends ApiController
 {
@@ -29,11 +30,7 @@ class TaskListController extends ApiController
     public function store(StoreTaskListRequest $request)
     {
         try {
-            $tasks=new TaskList();
-            $tasks->name=$request->name;
-            $tasks->priority=$request->priority;
-            $tasks->status=$request->status;
-            $tasks->save();
+            $tasks=TaskList::create($request->validated());
             return response()->json(['success'=>true,'message'=>'Task stored successfully!','result'=>$tasks],200);
         } catch (\Throwable $th) {
             return response()->json(['success'=>false,'message'=>'Internal Server Error!','error'=>$th->getMessage()],500);
@@ -58,14 +55,11 @@ class TaskListController extends ApiController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(UpdateTaskListRequest $request, $id)
     {
         try {
             $task=TaskList::findOrFail($id);
-            $task->name=$request->name ?? $task->name;
-            $task->priority=$request->priority ?? $task->priority;
-            $task->status=$request->status ?? $post->status;
-            $task->save();
+            $task->update($request->validated());
             return response()->json(["success"=>true,"message"=>"Task updated successfully!","result"=>$task],200);
         } catch (\Throwable $th) {
             return response()->json(['success'=>false,'message'=>'Internal Server Error!','error'=>$th->getMessage()],500);
