@@ -6,7 +6,7 @@ use App\Models\TaskList;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTaskListRequest;
 
-class TaskListController extends Controller
+class TaskListController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,8 @@ class TaskListController extends Controller
     {
         try {
             $tasks=TaskList::get();
-            return response()->json(['success'=>true,'message'=>'Data Fetched Successfully!','result'=>$tasks,'count'=>$tasks->count()],200);
+            // return response()->json(['success'=>true,'message'=>'Data Fetched Successfully!','result'=>$tasks,'count'=>$tasks->count()],200);
+            return successResponse($tasks,'Data Fetched Successfully!');
         } catch (\Throwable $th) {
             return response()->json(['success'=>false,'message'=>'Internal Server Error!','error'=>$th->getMessage()],500);
         }
