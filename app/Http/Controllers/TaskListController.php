@@ -6,7 +6,7 @@ use App\Models\TaskList;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTaskListRequest;
 use App\Http\Requests\UpdateTaskListRequest;
-
+use App\Http\Controllers\ApiController;
 class TaskListController extends ApiController
 {
     /**
@@ -16,8 +16,7 @@ class TaskListController extends ApiController
     {
         try {
             $tasks=TaskList::get();
-            // return response()->json(['success'=>true,'message'=>'Data Fetched Successfully!','result'=>$tasks,'count'=>$tasks->count()],200);
-            return successResponse($tasks,'Data Fetched Successfully!');
+            return response()->json(['success'=>true,'message'=>'Data Fetched Successfully!','result'=>$tasks,'count'=>$tasks->count()],200);
         } catch (\Throwable $th) {
             return response()->json(['success'=>false,'message'=>'Internal Server Error!','error'=>$th->getMessage()],500);
         }
